@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gys.dao.RolesPermissionsMapper" >
+  <resultMap id="BaseResultMap" type="com.gys.entity.RolesPermissions" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="permission_id" property="permissionId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, role_id, permission_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from roles_permissions
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from roles_permissions
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.gys.entity.RolesPermissions" >
+    insert into roles_permissions (id, role_id, permission_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=VARCHAR}, #{permissionId,jdbcType=VARCHAR}
+      )
+  </insert>
+ 
+  <insert id="insertSelective" parameterType="com.gys.entity.RolesPermissions" >
+    insert into roles_permissions
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="permissionId != null" >
+        permission_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionId != null" >
+        #{permissionId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gys.entity.RolesPermissions" >
+    update roles_permissions
+    <set >
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="permissionId != null" >
+        permission_id = #{permissionId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gys.entity.RolesPermissions" >
+    update roles_permissions
+    set role_id = #{roleId,jdbcType=VARCHAR},
+      permission_id = #{permissionId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 移除权限 -->
+  <delete id="deletePermissionsByRoleIdPermissionId"   >
+   delete from roles_permissions
+    where role_id=#{roleId,jdbcType=VARCHAR} and permission_id=#{permissionId,jdbcType=VARCHAR}
+  </delete>
+  <!-- 授权 -->
+   <insert id="insertPermissionsByRoleIdPermissionId"  >
+    insert into roles_permissions (id, role_id, permission_id
+      )
+    values (null, #{roleId,jdbcType=VARCHAR}, #{permissionId,jdbcType=VARCHAR}
+      )
+  </insert>
+</mapper>

@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gys.dao.PurchaseMapper" >
+  <resultMap id="BaseResultMap" type="com.gys.entity.Purchase" >
+   <id column="id" property="id" jdbcType="INTEGER" />
+      <result column="purchase_id" property="purchaseId" jdbcType="VARCHAR" />
+    <result column="pay_type" property="payType" jdbcType="VARCHAR" />
+    <result column="orders_id" property="ordersId" jdbcType="VARCHAR" />
+    <result column="purchase_date" property="purchaseDate" jdbcType="DATE" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="logistics_id" property="logisticsId" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="employee_id" property="employeeId" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+     
+    
+    <result column="customer_address_id" property="customerAddressId" jdbcType="INTEGER" />
+    <result column="pay_time" property="payTime" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="other" property="other" jdbcType="VARCHAR" />
+    
+    <association property="supplier" column="supplier_id" 
+		select="com.gys.dao.SupplierMapper.selectByPrimaryKey"/>
+    <association property="warehouse" column="warehouse_id" 
+		select="com.gys.dao.WarehouseMapper.selectByPrimaryKey"/>
+    <association property="jl" column="jl_id" 
+		select="com.gys.dao.UsersMapper.selectByPrimaryKey"/>
+		
+     <collection property="purchasetrade" column="purchase_id" 
+    select="com.gys.dao.PurchasetradeMapper.selectPurchasetradeByPurchaseId"/>
+   
+  
+    </resultMap>
+     <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+   <sql id="Base_Column_List" >
+    id, purchase_id, pay_type, orders_id, warehouse_id, purchase_date, purchase_price, 
+    logistics_id, status, employee_id, description, supplier_id, customer_address_id, 
+    pay_time, type, other, jl_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gys.entity.PurchaseExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from purchase
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  
+    select 
+    purchase.* 
+    from purchase
+    where id = #{id,jdbcType=INTEGER} 
+ 
+<!--     select 
+    purchase.*,goods.goods_name,warehouse.warehouse_name 
+    from purchase,goods,warehouse 
+    where purchase_id = #{purchaseId,jdbcType=INTEGER} and purchase.goods_id=goods.goods_id and purchase.warehouse_id=warehouse.warehouse_id -->
+  </select>
+   
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from purchase
+    where purchase_id = #{purchaseId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gys.entity.Purchase" >
+    insert into purchase (purchase_id, warehouse_id, goods_id, 
+      purchase_quantity, purchase_date, purchase_price, 
+      logistics_id, status)
+    values (#{purchaseId,jdbcType=INTEGER}, #{warehouseId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, 
+      #{purchaseQuantity,jdbcType=INTEGER}, #{purchaseDate,jdbcType=DATE}, #{purchasePrice,jdbcType=DECIMAL}, 
+      #{logisticsId,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR})
+  </insert>
+<!--   <insert id="insertPurchase" parameterType="com.gys.entity.Purchase" >
+    insert into purchase (purchase_id,  warehouse_id, goods_id, 
+      purchase_quantity, purchase_date, purchase_price,logistics_id, 
+     status)
+    values (null,  #{warehouseId,jdbcType=INTEGER}, #{goodsId,jdbcType=INTEGER}, 
+      #{purchaseQuantity,jdbcType=INTEGER},CURRENT_DATE, #{purchasePrice,jdbcType=DECIMAL},null,
+       #{status,jdbcType=VARCHAR})
+  </insert> -->
+   <insert id="insertSelective" parameterType="com.gys.entity.Purchase" >
+    insert into purchase
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="purchaseId != null" >
+        purchase_id,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="ordersId != null" >
+        orders_id,
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id,
+      </if>
+      <if test="purchaseDate != null" >
+        purchase_date,
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="logisticsId != null" >
+        logistics_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="employeeId != null" >
+        employee_id,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="supplierId != null" >
+        supplier_id,
+      </if>
+      <if test="customerAddressId != null" >
+        customer_address_id,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+      <if test="jlId != null" >
+        jl_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseId != null" >
+        #{purchaseId,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="ordersId != null" >
+        #{ordersId,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null" >
+        #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseDate != null" >
+        #{purchaseDate,jdbcType=DATE},
+      </if>
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="logisticsId != null" >
+        #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeId != null" >
+        #{employeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="customerAddressId != null" >
+        #{customerAddressId,jdbcType=INTEGER},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="jlId != null" >
+        #{jlId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <insert id="insertSelective1" parameterType="com.gys.entity.Purchase" >
+    insert into purchase
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="purchaseId != null" >
+        purchase_id,
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="purchaseQuantity != null" >
+        purchase_quantity,
+      </if>
+      
+        purchase_date,
+    
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="logisticsId != null" >
+        logistics_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="purchaseId != null" >
+        #{purchaseId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null" >
+        #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseQuantity != null" >
+        #{purchaseQuantity,jdbcType=INTEGER},
+      </if>
+     
+        curdate(),
+     
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="logisticsId != null" >
+        #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.gys.entity.Purchase" >
+    update purchase
+    <set >
+      <if test="purchaseId != null" >
+        purchase_id = #{purchaseId,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=VARCHAR},
+      </if>
+      <if test="ordersId != null" >
+        orders_id = #{ordersId,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseDate != null" >
+        purchase_date = #{purchaseDate,jdbcType=DATE},
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="logisticsId != null" >
+        logistics_id = #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeId != null" >
+        employee_id = #{employeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierId != null" >
+        supplier_id = #{supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="customerAddressId != null" >
+        customer_address_id = #{customerAddressId,jdbcType=INTEGER},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="jlId != null" >
+        jl_id = #{jlId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gys.entity.Purchase" >
+    update purchase
+    set warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      purchase_quantity = #{purchaseQuantity,jdbcType=INTEGER},
+      purchase_date = #{purchaseDate,jdbcType=DATE},
+      purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      logistics_id = #{logisticsId,jdbcType=INTEGER},
+      status = #{status,jdbcType=VARCHAR}
+    where purchase_id = #{purchaseId,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  
+  <!-- 查询所有Purchase数量 -->
+  <select id="getAllCount" resultType="java.lang.Integer">
+  SELECT count(*) from purchase  
+  </select>
+  <!-- 分页查询所有Purchase -->
+  <select id="selectPurchasePage" resultMap="BaseResultMap"   >
+select 
+   purchase.* 
+    from purchase 
+     
+      limit #{pageNo,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  
+    <!-- 查询所有Purchase数量 -->
+  <select id="getAllCountPeng" resultType="java.lang.Integer">
+  SELECT count(*)   
+      from purchase
+    where  
+		purchase.status='待审核'
+  </select>
+  <!-- 分页查询所有Purchase -->
+  <select id="selectPurchasePending" resultMap="BaseResultMap"   >
+  select 
+    * 
+    from purchase 
+    where  
+		 purchase.status='待审核'
+      limit #{pageNo,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+   <!-- 查询所有采购信息 -->
+  <select id="selectPurchase" resultMap="BaseResultMap"   >
+ select 
+   purchase.*,goods.goods_name,warehouse.warehouse_name 
+    from purchase,goods,warehouse 
+    where  
+		purchase.goods_id=goods.goods_id and purchase.warehouse_id=warehouse.warehouse_id
+  </select>
+ 
+  
+</mapper>

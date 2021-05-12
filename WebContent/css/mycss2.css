@@ -1,0 +1,29 @@
+.tianjia{
+ /*    width:700px;
+    height:800px;
+    */
+    width:75%;
+    
+    margin: 0 auto; 
+    /* margin-left: 90px ;  */
+    }
+   
+    #anniu{
+  width:100%;
+  
+    text-align: center;
+    }
+    
+    .tianjia .form-group{
+    margin-top:10px;
+    }
+    .fanhuiA{
+    position: absolute;
+    
+    left: 20px;
+    top: 20px;
+    }
+    .fanhuiA i{
+    color:#05C697;
+    font-size: 30px;
+    }

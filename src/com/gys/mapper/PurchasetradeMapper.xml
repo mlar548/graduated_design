@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gys.dao.PurchasetradeMapper" >
+  <resultMap id="BaseResultMap" type="com.gys.entity.Purchasetrade" >
+    <id column="ptid" property="ptid" jdbcType="INTEGER" />
+    <result column="purchaseTrade_id" property="purchasetradeId" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="INTEGER" />
+    <result column="purchase_id" property="purchaseId" jdbcType="VARCHAR" />
+    <result column="zt" property="zt" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="one_price" property="onePrice" jdbcType="DECIMAL" />
+    <result column="all_price" property="allPrice" jdbcType="DECIMAL" />
+    
+     <association property="goods" column="goods_id" 
+		select="com.gys.dao.GoodsMapper.selectByPrimaryKey"/>
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ptid, purchaseTrade_id, goods_id, quantity, purchase_id, zt, description, one_price, 
+    all_price
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from purchasetrade
+    where ptid = #{ptid,jdbcType=INTEGER}
+  </select>
+  <select id="selectPurchasetradeByPurchaseId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from purchasetrade
+    where purchase_id = #{purchaseId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from purchasetrade
+    where ptid = #{ptid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gys.entity.Purchasetrade" >
+    insert into purchasetrade (ptid, purchaseTrade_id, goods_id, 
+      quantity, purchase_id, zt, 
+      description, one_price, all_price
+      )
+    values (#{ptid,jdbcType=INTEGER}, #{purchasetradeId,jdbcType=VARCHAR}, #{goodsId,jdbcType=INTEGER}, 
+      #{quantity,jdbcType=INTEGER}, #{purchaseId,jdbcType=VARCHAR}, #{zt,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{onePrice,jdbcType=DECIMAL}, #{allPrice,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gys.entity.Purchasetrade" >
+    insert into purchasetrade
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ptid != null" >
+        ptid,
+      </if>
+      <if test="purchasetradeId != null" >
+        purchaseTrade_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="purchaseId != null" >
+        purchase_id,
+      </if>
+      <if test="zt != null" >
+        zt,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="onePrice != null" >
+        one_price,
+      </if>
+      <if test="allPrice != null" >
+        all_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ptid != null" >
+        #{ptid,jdbcType=INTEGER},
+      </if>
+      <if test="purchasetradeId != null" >
+        #{purchasetradeId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseId != null" >
+        #{purchaseId,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null" >
+        #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="onePrice != null" >
+        #{onePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="allPrice != null" >
+        #{allPrice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gys.entity.Purchasetrade" >
+    update purchasetrade
+    <set >
+      <if test="purchasetradeId != null" >
+        purchaseTrade_id = #{purchasetradeId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null" >
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="quantity != null" >
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="purchaseId != null" >
+        purchase_id = #{purchaseId,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null" >
+        zt = #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="onePrice != null" >
+        one_price = #{onePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="allPrice != null" >
+        all_price = #{allPrice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ptid = #{ptid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gys.entity.Purchasetrade" >
+    update purchasetrade
+    set purchaseTrade_id = #{purchasetradeId,jdbcType=VARCHAR},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      quantity = #{quantity,jdbcType=INTEGER},
+      purchase_id = #{purchaseId,jdbcType=VARCHAR},
+      zt = #{zt,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      one_price = #{onePrice,jdbcType=DECIMAL},
+      all_price = #{allPrice,jdbcType=DECIMAL}
+    where ptid = #{ptid,jdbcType=INTEGER}
+  </update>
+</mapper>

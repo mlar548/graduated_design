@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gys.dao.TradeMapper" >
+  <resultMap id="BaseResultMap" type="com.gys.entity.Trade" >
+    <id column="trade_id" property="tradeId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="warehouse_id" property="warehouseId" jdbcType="INTEGER" />
+    <result column="trade_quantity" property="tradeQuantity" jdbcType="INTEGER" />
+    <result column="trade_one_price" property="tradeOnePrice" jdbcType="DECIMAL" />
+    <result column="trade_all_price" property="tradeAllPrice" jdbcType="DECIMAL" />
+    <result column="zt" property="zt" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="other" property="other" jdbcType="VARCHAR" />
+    <result column="old_one_price" property="oldOnePrice" jdbcType="DECIMAL" />
+    <result column="old_all_price" property="oldAllPrice" jdbcType="DECIMAL" />
+    <association property="goods" column="goods_id" 
+		select="com.gys.dao.GoodsMapper.selectByPrimaryKey"/>
+    
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    trade_id, order_id, goods_id, warehouse_id, trade_quantity, trade_one_price, trade_all_price, 
+    zt, description, other, old_one_price, old_all_price
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gys.entity.TradeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from trade
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from trade
+    where trade_id = #{tradeId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByoid" resultMap="BaseResultMap"   >
+    select 
+    <include refid="Base_Column_List" />
+    from trade
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from trade
+    where trade_id = #{tradeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gys.entity.Trade" >
+    insert into trade (trade_id, order_id, goods_id, 
+      warehouse_id, trade_quantity, trade_one_price, 
+      trade_all_price, zt, description, 
+      other, old_one_price, old_all_price
+      )
+    values (#{tradeId,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR}, #{goodsId,jdbcType=INTEGER}, 
+      #{warehouseId,jdbcType=INTEGER}, #{tradeQuantity,jdbcType=INTEGER}, #{tradeOnePrice,jdbcType=DECIMAL}, 
+      #{tradeAllPrice,jdbcType=DECIMAL}, #{zt,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{other,jdbcType=VARCHAR}, #{oldOnePrice,jdbcType=DECIMAL}, #{oldAllPrice,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gys.entity.Trade" >
+    insert into trade
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tradeId != null" >
+        trade_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id,
+      </if>
+      <if test="tradeQuantity != null" >
+        trade_quantity,
+      </if>
+      <if test="tradeOnePrice != null" >
+        trade_one_price,
+      </if>
+      <if test="tradeAllPrice != null" >
+        trade_all_price,
+      </if>
+      <if test="zt != null" >
+        zt,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+      <if test="oldOnePrice != null" >
+        old_one_price,
+      </if>
+      <if test="oldAllPrice != null" >
+        old_all_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tradeId != null" >
+        #{tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null" >
+        #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="tradeQuantity != null" >
+        #{tradeQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="tradeOnePrice != null" >
+        #{tradeOnePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="tradeAllPrice != null" >
+        #{tradeAllPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="zt != null" >
+        #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="oldOnePrice != null" >
+        #{oldOnePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="oldAllPrice != null" >
+        #{oldAllPrice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gys.entity.Trade" >
+    update trade
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsId != null" >
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="tradeQuantity != null" >
+        trade_quantity = #{tradeQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="tradeOnePrice != null" >
+        trade_one_price = #{tradeOnePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="tradeAllPrice != null" >
+        trade_all_price = #{tradeAllPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="zt != null" >
+        zt = #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="oldOnePrice != null" >
+        old_one_price = #{oldOnePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="oldAllPrice != null" >
+        old_all_price = #{oldAllPrice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where trade_id = #{tradeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gys.entity.Trade" >
+    update trade
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      trade_quantity = #{tradeQuantity,jdbcType=INTEGER},
+      trade_one_price = #{tradeOnePrice,jdbcType=DECIMAL},
+      trade_all_price = #{tradeAllPrice,jdbcType=DECIMAL},
+      zt = #{zt,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      other = #{other,jdbcType=VARCHAR},
+      old_one_price = #{oldOnePrice,jdbcType=DECIMAL},
+      old_all_price = #{oldAllPrice,jdbcType=DECIMAL}
+    where trade_id = #{tradeId,jdbcType=INTEGER}
+  </update>
+</mapper>

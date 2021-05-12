@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gys.dao.OtnoticeMapper" >
+  <resultMap id="BaseResultMap" type="com.gys.entity.Otnotice" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="otNotice_employee_id" property="otnoticeEmployeeId" jdbcType="INTEGER" />
+    <result column="zt" property="zt" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+
+    <result column="warehouse_last_num" property="warehouseLastNum" jdbcType="INTEGER" />
+    <result column="warehouse_id" property="warehouseId" jdbcType="INTEGER" />
+    
+    <association property="trade" column="trade_id" select="com.gys.dao.TradeMapper.selectByPrimaryKey"/>
+    <association property="warehouse" column="warehouse_id" select="com.gys.dao.WarehouseMapper.selectByPrimaryKey"/>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, otNotice_employee_id, zt, description, trade_id, warehouse_last_num, warehouse_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gys.entity.OtnoticeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from otnotice
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from otnotice
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from otnotice
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gys.entity.Otnotice" >
+    insert into otnotice (id, otNotice_employee_id, zt, 
+      description, trade_id, warehouse_last_num, 
+      warehouse_id)
+    values (#{id,jdbcType=INTEGER}, #{otnoticeEmployeeId,jdbcType=INTEGER}, #{zt,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{tradeId,jdbcType=INTEGER}, #{warehouseLastNum,jdbcType=INTEGER}, 
+      #{warehouseId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gys.entity.Otnotice" >
+    insert into otnotice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="otnoticeEmployeeId != null" >
+        otNotice_employee_id,
+      </if>
+      <if test="zt != null" >
+        zt,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="tradeId != null" >
+        trade_id,
+      </if>
+      <if test="warehouseLastNum != null" >
+        warehouse_last_num,
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="otnoticeEmployeeId != null" >
+        #{otnoticeEmployeeId,jdbcType=INTEGER},
+      </if>
+      <if test="zt != null" >
+        #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeId != null" >
+        #{tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseLastNum != null" >
+        #{warehouseLastNum,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null" >
+        #{warehouseId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gys.entity.Otnotice" >
+    update otnotice
+    <set >
+      <if test="otnoticeEmployeeId != null" >
+        otNotice_employee_id = #{otnoticeEmployeeId,jdbcType=INTEGER},
+      </if>
+      <if test="zt != null" >
+        zt = #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeId != null" >
+        trade_id = #{tradeId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseLastNum != null" >
+        warehouse_last_num = #{warehouseLastNum,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gys.entity.Otnotice" >
+    update otnotice
+    set otNotice_employee_id = #{otnoticeEmployeeId,jdbcType=INTEGER},
+      zt = #{zt,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      trade_id = #{tradeId,jdbcType=INTEGER},
+      warehouse_last_num = #{warehouseLastNum,jdbcType=INTEGER},
+      warehouse_id = #{warehouseId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

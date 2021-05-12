@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gys.dao.WarehouseMapper" >
+  <resultMap id="BaseResultMap" type="com.gys.entity.Warehouse" >
+    <id column="warehouse_id" property="warehouseId" jdbcType="INTEGER" />
+    <result column="warehouse_name" property="warehouseName" jdbcType="VARCHAR" />
+    <result column="warehouse_province" property="warehouseProvince" jdbcType="VARCHAR" />
+    <result column="warehouse_city" property="warehouseCity" jdbcType="VARCHAR" />
+    <result column="warehouse_address" property="warehouseAddress" jdbcType="VARCHAR" />
+    <result column="all_capacity" property="allCapacity" jdbcType="INTEGER" />
+     <result column="used_capacity" property="usedCapacity" jdbcType="INTEGER" />
+      <result column="last_capacity" property="lastCapacity" jdbcType="INTEGER" />
+       <result column="warehouse_goods_quantity" property="warehouseGoodsQuantity" jdbcType="INTEGER" />
+        
+    <collection property="warehouseGoodsList" column="warehouse_id" 
+    select="com.gys.dao.WarehouseGoodsMapper.selectByWarehouseId"/>
+   
+  </resultMap>
+  <sql id="Base_Column_List" >
+    warehouse_id, warehouse_name, warehouse_province, warehouse_city, warehouse_address, 
+    all_capacity
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from warehouse
+    where warehouse_id = #{warehouseId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 通过OrderId查找 -->
+  <select id="selectByOrderId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+     select * from warehouse where warehouse_province =
+(
+select province  from address
+ where address_id=(
+select address_id from orders WHERE order_id=  #{orderId,jdbcType=INTEGER})
+)
+  </select>
+  
+  
+  <!-- 分页查找所有仓库信息和空间存放情况 -->
+  <select id="selectWarehouseAndCapacityPage" resultMap="BaseResultMap"   >
+SELECT w.*,
+sum(remain *goods_capacity) as used_capacity,(all_capacity-sum(remain *goods_capacity)) as last_capacity
+FROM goods g,warehouse w,warehouse_goods wg 
+where g.goods_id=wg.goods_id and w.warehouse_id=wg.warehouse_id  GROUP BY w.warehouse_id  order BY  wg.warehouse_goods_id 
+limit #{pageNo,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+   <!-- 查询所有Warehouse数量 -->
+  <select id="getAllCount" resultType="java.lang.Integer">
+  SELECT count(*) from warehouse  
+  </select>
+  
+  
+  <!-- 查找所有仓库信息和空间存放情况 -->
+  <select id="selectWarehouseAndCapacity" resultMap="BaseResultMap"   >
+SELECT w.*,
+sum(remain *goods_capacity) as used_capacity,(all_capacity-sum(remain *goods_capacity)) as last_capacity
+FROM goods g,warehouse w,warehouse_goods wg 
+where g.goods_id=wg.goods_id and w.warehouse_id=wg.warehouse_id  GROUP BY w.warehouse_id  order BY  wg.warehouse_goods_id 
+  </select>
+  
+  
+  <!-- 查看所有仓库信息 -->
+  <select id="selectWarehouse" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from warehouse 
+  </select>
+  
+  <!-- ByGoodsId查看所有仓库信息 -->
+  <select id="selectWarehouseByGoodsId" resultMap="BaseResultMap"  >
+   select warehouse.*,warehouse_goods.warehouse_goods_quantity
+    from warehouse_goods,warehouse 
+where goods_id=#{goodsId,jdbcType=INTEGER}
+and warehouse_goods.warehouse_id=warehouse.warehouse_id
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from warehouse
+    where warehouse_id = #{warehouseId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gys.entity.Warehouse" >
+    insert into warehouse (warehouse_id, warehouse_name, warehouse_province, 
+      warehouse_city, warehouse_address, all_capacity
+      )
+    values (#{warehouseId,jdbcType=INTEGER}, #{warehouseName,jdbcType=VARCHAR}, #{warehouseProvince,jdbcType=VARCHAR}, 
+      #{warehouseCity,jdbcType=VARCHAR}, #{warehouseAddress,jdbcType=VARCHAR}, #{allCapacity,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.gys.entity.Warehouse" >
+    insert into warehouse
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="warehouseId != null" >
+        warehouse_id,
+      </if>
+      <if test="warehouseName != null" >
+        warehouse_name,
+      </if>
+      <if test="warehouseProvince != null" >
+        warehouse_province,
+      </if>
+      <if test="warehouseCity != null" >
+        warehouse_city,
+      </if>
+      <if test="warehouseAddress != null" >
+        warehouse_address,
+      </if>
+      <if test="allCapacity != null" >
+        all_capacity,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="warehouseId != null" >
+        #{warehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseName != null" >
+        #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseProvince != null" >
+        #{warehouseProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCity != null" >
+        #{warehouseCity,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseAddress != null" >
+        #{warehouseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="allCapacity != null" >
+        #{allCapacity,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gys.entity.Warehouse" >
+    update warehouse
+    <set >
+      <if test="warehouseName != null" >
+        warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseProvince != null" >
+        warehouse_province = #{warehouseProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCity != null" >
+        warehouse_city = #{warehouseCity,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseAddress != null" >
+        warehouse_address = #{warehouseAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="allCapacity != null" >
+        all_capacity = #{allCapacity,jdbcType=INTEGER},
+      </if>
+    </set>
+    where warehouse_id = #{warehouseId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gys.entity.Warehouse" >
+    update warehouse
+    set warehouse_name = #{warehouseName,jdbcType=VARCHAR},
+      warehouse_province = #{warehouseProvince,jdbcType=VARCHAR},
+      warehouse_city = #{warehouseCity,jdbcType=VARCHAR},
+      warehouse_address = #{warehouseAddress,jdbcType=VARCHAR},
+      all_capacity = #{allCapacity,jdbcType=INTEGER}
+    where warehouse_id = #{warehouseId,jdbcType=INTEGER}
+  </update>
+</mapper>

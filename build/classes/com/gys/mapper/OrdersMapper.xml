@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gys.dao.OrdersMapper" >
+ <resultMap id="BaseResultMap" type="com.gys.entity.Orders" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="order_start_date" property="orderStartDate" jdbcType="TIMESTAMP" />
+    <result column="order_find_time" property="orderFindTime" jdbcType="TIMESTAMP" />
+    <result column="order_ans_time" property="orderAnsTime" jdbcType="TIMESTAMP" />
+    <result column="order_send_date" property="orderSendDate" jdbcType="TIMESTAMP" />
+    <result column="logistics_id" property="logisticsId" jdbcType="INTEGER" />
+    <result column="order_price" property="orderPrice" jdbcType="DECIMAL" />
+    <result column="pay_state" property="payState" jdbcType="VARCHAR" />
+    <result column="order_pay_date" property="orderPayDate" jdbcType="VARCHAR" />
+    <result column="order_pay_type" property="orderPayType" jdbcType="VARCHAR" />
+    <result column="touser_datelong" property="touserDatelong" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="cp_employee_id" property="cpEmployeeId" jdbcType="VARCHAR" />
+    <result column="ans_employee_id" property="ansEmployeeId" jdbcType="VARCHAR" />
+    <result column="msg" property="msg" jdbcType="VARCHAR" />
+    <result column="zt" property="zt" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="jl_id" property="jlId" jdbcType="VARCHAR" />
+    <result column="other" property="other" jdbcType="VARCHAR" />
+    
+     <association property="address" column="address_id" 
+		select="com.gys.dao.AddressMapper.selectByPrimaryKey"/>
+    
+     <association property="warehouse" column="warehouse_id" 
+		select="com.gys.dao.WarehouseMapper.selectByPrimaryKey"/>
+    
+    
+    <collection property="tradeList" column="order_id" 
+    select="com.gys.dao.TradeMapper.selectByoid"/>
+   
+     
+  
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, order_id, order_start_date, order_find_time, order_ans_time, order_send_date, 
+    logistics_id, order_price, address_id, pay_state, order_pay_date, order_pay_type, 
+    touser_datelong, user_id, cp_employee_id, ans_employee_id, msg, zt, description, 
+    jl_id, other, warehouse_id
+  </sql>
+   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gys.entity.OrdersExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from orders
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPrimaryKey2" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+   select orders.*,address.province,address.city,address.alladdress  
+  from orders,address 
+    where order_id = #{orderId,jdbcType=INTEGER} and address.address_id=orders.address_id
+  </select>
+  
+  <select id="selectOrdersBylogisticsIdis0" resultMap="BaseResultMap"  >
+    select orders.*,address.province,address.city,address.alladdress  
+  from orders,address 
+    where logistics_id = 0 and address.address_id=orders.address_id
+    limit #{pageNo,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <!-- 查询所有Orders待处理数量 -->
+  <select id="getAllCountPend" resultType="java.lang.Integer">
+  SELECT count(*) from orders 
+   where logistics_id = 0   
+  </select>
+  
+  
+  
+  <!-- 查找所有待处理信息 -->
+  <select id="selectOrdersPending" resultMap="BaseResultMap"   >
+     select orders.*,address.province,address.city,address.alladdress  
+  from orders,address 
+    where logistics_id = 0 and address.address_id=orders.address_id
+     limit #{pageNo,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select> 
+ 
+  
+   
+  
+  
+  
+  <!-- 查询所有Orders数量 -->
+  <select id="getAllCount" resultType="java.lang.Integer">
+  SELECT count(*) from orders  
+  </select>
+  <!-- 分页查询所有Orders -->
+  <select id="selectOrdersPage" resultMap="BaseResultMap"   >
+select orders.*,address.province,address.city,address.alladdress 
+  from orders,address 
+  where address.address_id=orders.address_id
+      limit #{pageNo,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查找所有Orders  -->
+  <select id="selectOrders" resultMap="BaseResultMap"  >
+  select orders.*,address.province,address.city,address.alladdress 
+  from orders,address 
+  where address.address_id=orders.address_id
+  </select>
+   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from orders
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPrimaryKey1" parameterType="java.lang.Integer" >
+    delete from orders
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+ <insert id="insert" parameterType="com.gys.entity.Orders" >
+    insert into orders (id, order_id, order_start_date, 
+      order_find_time, order_ans_time, order_send_date, 
+      logistics_id, order_price, address_id, 
+      pay_state, order_pay_date, order_pay_type, 
+      touser_datelong, user_id, cp_employee_id, 
+      ans_employee_id, msg, zt, 
+      description, jl_id, other, 
+      warehouse_id)
+    values (#{id,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR}, #{orderStartDate,jdbcType=TIMESTAMP}, 
+      #{orderFindTime,jdbcType=TIMESTAMP}, #{orderAnsTime,jdbcType=TIMESTAMP}, #{orderSendDate,jdbcType=TIMESTAMP}, 
+      #{logisticsId,jdbcType=INTEGER}, #{orderPrice,jdbcType=DECIMAL}, #{addressId,jdbcType=INTEGER}, 
+      #{payState,jdbcType=VARCHAR}, #{orderPayDate,jdbcType=VARCHAR}, #{orderPayType,jdbcType=VARCHAR}, 
+      #{touserDatelong,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{cpEmployeeId,jdbcType=VARCHAR}, 
+      #{ansEmployeeId,jdbcType=VARCHAR}, #{msg,jdbcType=VARCHAR}, #{zt,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{jlId,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR}, 
+      #{warehouseId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gys.entity.Orders" keyProperty="logisticsId"
+			useGeneratedKeys="true">
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="orderStartDate == null" >
+        order_start_date,
+      </if>
+      <if test="orderFindTime != null" >
+        order_find_time,
+      </if>
+      <if test="orderAnsTime != null" >
+        order_ans_time,
+      </if>
+      <if test="orderSendDate != null" >
+        order_send_date,
+      </if>
+      <if test="logisticsId != null" >
+        logistics_id,
+      </if>
+      <if test="orderPrice != null" >
+        order_price,
+      </if>
+      <if test="addressId != null" >
+        address_id,
+      </if>
+      <if test="payState != null" >
+        pay_state,
+      </if>
+      <if test="orderPayDate != null" >
+        order_pay_date,
+      </if>
+      <if test="orderPayType != null" >
+        order_pay_type,
+      </if>
+      <if test="touserDatelong != null" >
+        touser_datelong,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="cpEmployeeId != null" >
+        cp_employee_id,
+      </if>
+      <if test="ansEmployeeId != null" >
+        ans_employee_id,
+      </if>
+      <if test="msg != null" >
+        msg,
+      </if>
+      <if test="zt != null" >
+        zt,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="jlId != null" >
+        jl_id,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStartDate == null" >
+        now(),
+      </if>
+      <if test="orderFindTime != null" >
+        #{orderFindTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderAnsTime != null" >
+        #{orderAnsTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderSendDate != null" >
+        #{orderSendDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logisticsId != null" >
+        #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="orderPrice != null" >
+        #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="addressId != null" >
+        #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="payState != null" >
+        #{payState,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPayDate != null" >
+        #{orderPayDate,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPayType != null" >
+        #{orderPayType,jdbcType=VARCHAR},
+      </if>
+      <if test="touserDatelong != null" >
+        #{touserDatelong,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="cpEmployeeId != null" >
+        #{cpEmployeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="ansEmployeeId != null" >
+        #{ansEmployeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null" >
+        #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null" >
+        #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="jlId != null" >
+        #{jlId,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null" >
+        #{warehouseId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+   
+  <update id="updateByPrimaryKeySelective1" parameterType="com.gys.entity.Orders" >
+    update orders
+    <set >
+      <if test="orderStartDate != null" >
+        order_start_date = #{orderStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderSendDate != null" >
+        order_send_date = #{orderSendDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logisticsId != null" >
+        logistics_id = #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="addressId != null" >
+        address_id = #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="payState != null" >
+        pay_state = #{payState,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey1" parameterType="com.gys.entity.Orders" >
+    update orders
+    set order_start_date = #{orderStartDate,jdbcType=TIMESTAMP},
+      order_send_date = #{orderSendDate,jdbcType=TIMESTAMP},
+      logistics_id = #{logisticsId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      address_id = #{addressId,jdbcType=INTEGER},
+      pay_state = #{payState,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.gys.entity.Orders" >
+    update orders
+    <set >
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStartDate != null" >
+        order_start_date = #{orderStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderFindTime != null" >
+        order_find_time = #{orderFindTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderAnsTime != null" >
+        order_ans_time = #{orderAnsTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderSendDate != null" >
+        order_send_date = #{orderSendDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logisticsId != null" >
+        logistics_id = #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="orderPrice != null" >
+        order_price = #{orderPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="addressId != null" >
+        address_id = #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="payState != null" >
+        pay_state = #{payState,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPayDate != null" >
+        order_pay_date = #{orderPayDate,jdbcType=VARCHAR},
+      </if>
+      <if test="orderPayType != null" >
+        order_pay_type = #{orderPayType,jdbcType=VARCHAR},
+      </if>
+      <if test="touserDatelong != null" >
+        touser_datelong = #{touserDatelong,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="cpEmployeeId != null" >
+        cp_employee_id = #{cpEmployeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="ansEmployeeId != null" >
+        ans_employee_id = #{ansEmployeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="msg != null" >
+        msg = #{msg,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null" >
+        zt = #{zt,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="jlId != null" >
+        jl_id = #{jlId,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseId != null" >
+        warehouse_id = #{warehouseId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gys.entity.Orders" >
+    update orders
+    set order_id = #{orderId,jdbcType=VARCHAR},
+      order_start_date = #{orderStartDate,jdbcType=TIMESTAMP},
+      order_find_time = #{orderFindTime,jdbcType=TIMESTAMP},
+      order_ans_time = #{orderAnsTime,jdbcType=TIMESTAMP},
+      order_send_date = #{orderSendDate,jdbcType=TIMESTAMP},
+      logistics_id = #{logisticsId,jdbcType=INTEGER},
+      order_price = #{orderPrice,jdbcType=DECIMAL},
+      address_id = #{addressId,jdbcType=INTEGER},
+      pay_state = #{payState,jdbcType=VARCHAR},
+      order_pay_date = #{orderPayDate,jdbcType=VARCHAR},
+      order_pay_type = #{orderPayType,jdbcType=VARCHAR},
+      touser_datelong = #{touserDatelong,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      cp_employee_id = #{cpEmployeeId,jdbcType=VARCHAR},
+      ans_employee_id = #{ansEmployeeId,jdbcType=VARCHAR},
+      msg = #{msg,jdbcType=VARCHAR},
+      zt = #{zt,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      jl_id = #{jlId,jdbcType=VARCHAR},
+      other = #{other,jdbcType=VARCHAR},
+      warehouse_id = #{warehouseId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

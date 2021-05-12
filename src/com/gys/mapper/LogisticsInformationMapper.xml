@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gys.dao.LogisticsInformationMapper" >
+  <resultMap id="BaseResultMap" type="com.gys.entity.LogisticsInformation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="lt_id" property="ltId" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="information" property="information" jdbcType="VARCHAR" />
+    <result column="lt_time" property="ltTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, lt_id, address, information, lt_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from logistics_information
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <!-- logisticsId找物流信息 -->
+  <select id="selectlogisticsInformationBylogisticsId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from logistics_information
+    where lt_id = #{logisticsId,jdbcType=INTEGER}
+  </select>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from logistics_information
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gys.entity.LogisticsInformation" >
+    insert into logistics_information (id, lt_id, address, 
+      information, lt_time)
+    values (#{id,jdbcType=INTEGER}, #{ltId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, 
+      #{information,jdbcType=VARCHAR}, #{ltTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gys.entity.LogisticsInformation" >
+    insert into logistics_information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="ltId != null" >
+        lt_id,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="information != null" >
+        information,
+      </if>
+      <if test="ltTime == null" >
+        lt_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="ltId != null" >
+        #{ltId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="information != null" >
+        #{information,jdbcType=VARCHAR},
+      </if>
+      <if test="ltTime == null" >
+       now(),
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gys.entity.LogisticsInformation" >
+    update logistics_information
+    <set >
+      <if test="ltId != null" >
+        lt_id = #{ltId,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="information != null" >
+        information = #{information,jdbcType=VARCHAR},
+      </if>
+      <if test="ltTime != null" >
+        lt_time = #{ltTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gys.entity.LogisticsInformation" >
+    update logistics_information
+    set lt_id = #{ltId,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      information = #{information,jdbcType=VARCHAR},
+      lt_time = #{ltTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,432 @@
+body,
+dl,
+dt,
+ul,
+ol,
+h1,
+h2,
+h3,
+h4,
+button,
+textarea,
+p,
+dd {
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    border: 0;
+    vertical-align: middle;
+}
+
+:focus {
+    outline: 0;
+}
+
+body {
+    line-height: 1.5;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+:link,
+:visited {
+    text-decoration: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+input,
+button,
+textarea,
+select,
+option {
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+}
+
+.clearfix:after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {
+    _zoom: 1;
+}
+
+.clear {
+    clear: both;
+}
+
+body {
+    font: 12px/1.5 "Microsoft Yahei", Verdana, sans-serif;
+    color: #333;
+}
+
+a {
+    color: #333;
+}
+
+    a:active,
+    a:hover {
+        text-decoration: underline;
+    }
+
+.fl {
+    float: left;
+}
+
+.fr {
+    float: right;
+}
+
+.color-gray {
+    color: #999;
+}
+
+.color-orange {
+    color: #f57a02;
+}
+
+.color-blue {
+    color: #468bd2;
+}
+
+.color-red {
+    color: #d90c0c;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.user-wrapper {
+    width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+    *zoom: 1;
+}
+
+    .user-wrapper:before,
+    .user-wrapper:after {
+        content: " ";
+        display: table;
+    }
+
+    .user-wrapper:after {
+        clear: both;
+    }
+
+.checkbox {
+    margin: -1px 3px 1px 2px;
+    vertical-align: middle;
+}
+
+.user-input-text {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 13px;
+    padding: 10px 10px 10px 40px;
+    width: 270px;
+}
+
+    .user-input-text.user-name {
+        background: url(../images/icon-user.png) 10px no-repeat;
+    }
+
+    .user-input-text.user-pwd {
+        background: url(../images/icon-key.png) 10px no-repeat;
+    }
+
+    .user-input-text.user-name-r {
+        background: url(../images/icon-user.png) 288px no-repeat;
+        padding: 10px 40px 10px 10px;
+    }
+
+    .user-input-text.user-pwd-r {
+        background: url(../images/icon-key.png) 288px no-repeat;
+        padding: 10px 40px 10px 10px;
+    }
+
+    .user-input-text.user-auth-code {
+        padding: 10px 10px 10px 10px;
+        width: 120px;
+    }
+
+    .user-input-text.user-auth-code-b {
+        padding: 10px 10px 10px 10px;
+        width: 120px;
+    }
+
+    .user-input-text.user-auth-code-i {
+        background: url(../images/icon-console.png) 10px no-repeat;
+    }
+
+    .user-input-text.user-text-default {
+        padding: 10px 40px 10px 10px;
+    }
+
+    .user-input-text.user-phone {
+        background: url(../images/icon-phone.png) 295px no-repeat;
+        padding: 10px 40px 10px 10px;
+    }
+
+    .user-input-text:hover,
+    .user-input-text:focus {
+        border: 1px solid #f0860a;
+    }
+
+.logo-wrap {
+    height: 100%;
+    _overflow: hidden;
+}
+
+    .logo-wrap .logo {
+        display: inline-block;
+        *zoom: 1;
+        *display: inline;
+        vertical-align: middle;
+    }
+
+    .logo-wrap img {
+        vertical-align: middle;
+        max-height: 120px;
+    }
+
+    .logo-wrap > * {
+        display: inline-block;
+        *zoom: 1;
+        *display: inline;
+        vertical-align: middle;
+    }
+
+    .logo-wrap .verticle-palceholder {
+        display: inline-block;
+        height: 100%;
+        width: 0;
+        overflow: hidden;
+        vertical-align: middle;
+    }
+
+.register-header {
+    height: 130px;
+}
+
+.register-wrap {
+    box-shadow: 1px 1px 2px rgba(99, 99, 99, 0.1);
+    border-radius: 2px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+}
+
+    .register-wrap .notice-word {
+        font-size: 13px;
+        padding: 25px 0 20px 180px;
+    }
+
+    .register-wrap .action-bar {
+        padding: 25px 0 20px 40px;
+    }
+
+    .register-wrap .register-table {
+        padding: 0 0 50px 60px;
+        color: #777;
+    }
+
+        .register-wrap .register-table table th,
+        .register-wrap .register-table table td {
+            padding: 10px 5px;
+        }
+
+        .register-wrap .register-table table th {
+            font-weight: normal;
+            font-size: 14px;
+        }
+
+        .register-wrap .register-table.register-table-b {
+            padding-left: 200px;
+        }
+
+.register-title {
+    *zoom: 1;
+    padding-right: 20px;
+    color: #999;
+    line-height: 55px;
+    border-bottom: 1px solid #eee;
+}
+
+    .register-title:before,
+    .register-title:after {
+        content: " ";
+        display: table;
+    }
+
+    .register-title:after {
+        clear: both;
+    }
+
+    .register-title .register-title-tab a {
+        position: relative;
+        float: left;
+        padding: 0 35px;
+        bottom: -2px;
+        font-size: 16px;
+        color: #666;
+        border-bottom: 1px solid #eee;
+    }
+
+        .register-title .register-title-tab a:hover,
+        .register-title .register-title-tab a.active {
+            text-decoration: none;
+            border-bottom: 2px solid #f0860a;
+        }
+
+.inline-tip {
+    display: inline-block;
+    padding-left: 16px;
+    margin-left: 3px;
+    vertical-align: middle;
+}
+
+    .inline-tip.notice {
+        color: #f57a02;
+        background: url(../images/icon-warn.png) left no-repeat;
+    }
+
+    .inline-tip.error {
+        color: #d90c0c;
+        background: url(../images/icon-error.png) left no-repeat;
+    }
+
+    .inline-tip.success {
+        color: #999;
+        background: url(../images/icon-success.png) left no-repeat;
+    }
+
+    .inline-tip.default {
+        color: #999;
+        background: #f7f7fa;
+        margin-left: 0;
+        line-height: 30px;
+        padding: 0 10px;
+        border: 1px solid #f0f0f0;
+        visibility: visible;
+    }
+
+    .inline-tip.hidden {
+        visibility: hidden;
+    }
+
+.register-btn {
+    height: 39px;
+    width: 311px;
+    border: none;
+    line-height: 39px;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    background: url(../images/register-btn-a.png);
+}
+
+    .register-btn:hover,
+    .register-btn:active {
+        background: url(../images/register-btn.png);
+    }
+
+.register-footer {
+    margin: 30px 0 40px;
+    text-align: center;
+}
+
+.get-code-btn {
+    border: none;
+    background: url(../images/get-code-btn-c.png);
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid #f7b238;
+    border-radius: 3px;
+    padding: 0 35px;
+    cursor: pointer;
+    margin-left: 8px;
+    color: #fff;
+}
+
+    .get-code-btn:active {
+        border: 1px solid #f78938;
+        background: url(../images/get-code-btn-b.png);
+        color: #fff;
+    }
+
+    .get-code-btn.disabled,
+    .get-code-btn:disabled {
+        cursor: default;
+        border-left: 1px solid #ddd;
+        border-top: 1px solid #ddd;
+        border-right: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        background: url(../images/get-code-btn.png);
+        color: #666;
+    }
+
+.select {
+    padding: 8px 6px;
+    border-radius: 2px;
+    border: 1px solid #ddd;
+    margin-right: 4px;
+}
+/*pic hover*/
+.hover-box {
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+    position: relative;
+    border: 1px solid #eee;
+}
+
+    .hover-box > .del {
+        display: none;
+        position: absolute;
+        right: -10px;
+        top: -10px;
+        background-color: #fff;
+        box-shadow: 0 0 3px rgba(0,0,0,.2);
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        text-align: center;
+        color: red;
+        border: 1px solid #eee;
+        line-height: 12px;
+    }
+
+#div_uploadCardPic:hover .del {
+    display: block;
+}
+#div_uploadyyzzPic:hover .del {
+    display: block;
+}
+.upload-btn {
+    border: none;
+    background: url(../images/get-code-btn.png);
+    height: 30px;
+    border: 1px solid #f7b238;
+    border-radius: 3px;
+    padding: 0 14px;
+    cursor: pointer;
+    margin-left: 8px;
+    color: #666;
+}

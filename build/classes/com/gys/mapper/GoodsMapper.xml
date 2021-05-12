@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gys.dao.GoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.gys.entity.Goods" >
+    <id column="goods_id" property="goodsId" jdbcType="INTEGER" />
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+    <result column="goods_type_id" property="goodsTypeId" jdbcType="INTEGER" />
+    <result column="supplier_id" property="supplierId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="goods_photo" property="goodsPhoto" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="beforeprice" property="beforeprice" jdbcType="DECIMAL" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="remain" property="remain" jdbcType="INTEGER" />
+    <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+    <result column="goods_capacity" property="goodsCapacity" jdbcType="INTEGER" />
+     <result column="least_num" property="leastNum" jdbcType="INTEGER" />
+    <result column="second_num" property="secondNum" jdbcType="INTEGER" />
+    <result column="second_price" property="secondPrice" jdbcType="DECIMAL" />
+    <result column="third_num" property="thirdNum" jdbcType="INTEGER" />
+    <result column="third_price" property="thirdPrice" jdbcType="DECIMAL" />
+  
+     <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+       <result column="goods_type_name" property="goodsTypeName" jdbcType="VARCHAR" />
+       
+       <association property="goodsType" column="goods_type_id" select="com.gys.dao.GoodsTypeMapper.selectByPrimaryKey"/>
+       <association property="supplier" column="supplier_id" select="com.gys.dao.SupplierMapper.selectByPrimaryKey"/>
+  </resultMap>
+ <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    goods_id, goods_name, goods_type_id, supplier_id, title, goods_photo, price, beforeprice, 
+    unit, remain, introduce, goods_capacity, least_num, second_num, second_price, third_num, 
+    third_price
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gys.entity.GoodsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from goods
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+  </select>
+  <!-- 查询所有商品 -->
+  <select id="selectGoods" resultMap="BaseResultMap"  >
+    select 
+  goods.*, supplier.supplier_name ,goods_type.goods_type_name
+    from goods ,supplier,goods_type
+    where goods.goods_type_id =  goods_type.goods_type_id and goods.supplier_id=supplier.supplier_id
+  </select>
+  
+  <!-- 查询所有Goods数量 -->
+  <select id="getAllCount" resultType="java.lang.Integer">
+  SELECT count(*) from goods  
+  </select>
+  <!-- 分页查询所有Goods -->
+  <select id="selectGoodsPage" resultMap="BaseResultMap"   >
+    select 
+   goods.*, supplier.supplier_name ,goods_type.goods_type_name
+    from goods,supplier,goods_type
+    
+     where goods.goods_type_id =  goods_type.goods_type_id and goods.supplier_id=supplier.supplier_id
+      limit #{pageNo,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <select id="selectGoodsBySupplierId" resultMap="BaseResultMap"   >
+      SELECT goods.* from goods where supplier_id=#{supplierId};
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from goods
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gys.entity.Goods" >
+    insert into goods (goods_id, goods_name, goods_type_id, 
+      supplier_id, title, goods_photo, 
+      price, beforeprice, unit, 
+      remain, introduce, goods_capacity, 
+      least_num, second_num, second_price, 
+      third_num, third_price)
+    values (#{goodsId,jdbcType=INTEGER}, #{goodsName,jdbcType=VARCHAR}, #{goodsTypeId,jdbcType=INTEGER}, 
+      #{supplierId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{goodsPhoto,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{beforeprice,jdbcType=DECIMAL}, #{unit,jdbcType=VARCHAR}, 
+      #{remain,jdbcType=INTEGER}, #{introduce,jdbcType=VARCHAR}, #{goodsCapacity,jdbcType=INTEGER}, 
+      #{leastNum,jdbcType=INTEGER}, #{secondNum,jdbcType=INTEGER}, #{secondPrice,jdbcType=DECIMAL}, 
+      #{thirdNum,jdbcType=INTEGER}, #{thirdPrice,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gys.entity.Goods" >
+    insert into goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="goodsName != null" >
+        goods_name,
+      </if>
+      <if test="goodsTypeId != null" >
+        goods_type_id,
+      </if>
+      <if test="supplierId != null" >
+        supplier_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="goodsPhoto != null" >
+        goods_photo,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="beforeprice != null" >
+        beforeprice,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="remain != null" >
+        remain,
+      </if>
+      <if test="introduce != null" >
+        introduce,
+      </if>
+      <if test="goodsCapacity != null" >
+        goods_capacity,
+      </if>
+      <if test="leastNum != null" >
+        least_num,
+      </if>
+      <if test="secondNum != null" >
+        second_num,
+      </if>
+      <if test="secondPrice != null" >
+        second_price,
+      </if>
+      <if test="thirdNum != null" >
+        third_num,
+      </if>
+      <if test="thirdPrice != null" >
+        third_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsName != null" >
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsTypeId != null" >
+        #{goodsTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPhoto != null" >
+        #{goodsPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="beforeprice != null" >
+        #{beforeprice,jdbcType=DECIMAL},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="remain != null" >
+        #{remain,jdbcType=INTEGER},
+      </if>
+      <if test="introduce != null" >
+        #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCapacity != null" >
+        #{goodsCapacity,jdbcType=INTEGER},
+      </if>
+      <if test="leastNum != null" >
+        #{leastNum,jdbcType=INTEGER},
+      </if>
+      <if test="secondNum != null" >
+        #{secondNum,jdbcType=INTEGER},
+      </if>
+      <if test="secondPrice != null" >
+        #{secondPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="thirdNum != null" >
+        #{thirdNum,jdbcType=INTEGER},
+      </if>
+      <if test="thirdPrice != null" >
+        #{thirdPrice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gys.entity.Goods" >
+    update goods
+    <set >
+      <if test="goodsName != null" >
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsTypeId != null" >
+        goods_type_id = #{goodsTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="supplierId != null" >
+        supplier_id = #{supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPhoto != null" >
+        goods_photo = #{goodsPhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="beforeprice != null" >
+        beforeprice = #{beforeprice,jdbcType=DECIMAL},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="remain != null" >
+        remain = #{remain,jdbcType=INTEGER},
+      </if>
+      <if test="introduce != null" >
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCapacity != null" >
+        goods_capacity = #{goodsCapacity,jdbcType=INTEGER},
+      </if>
+      <if test="leastNum != null" >
+        least_num = #{leastNum,jdbcType=INTEGER},
+      </if>
+      <if test="secondNum != null" >
+        second_num = #{secondNum,jdbcType=INTEGER},
+      </if>
+      <if test="secondPrice != null" >
+        second_price = #{secondPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="thirdNum != null" >
+        third_num = #{thirdNum,jdbcType=INTEGER},
+      </if>
+      <if test="thirdPrice != null" >
+        third_price = #{thirdPrice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gys.entity.Goods" >
+    update goods
+    set goods_name = #{goodsName,jdbcType=VARCHAR},
+      goods_type_id = #{goodsTypeId,jdbcType=INTEGER},
+      supplier_id = #{supplierId,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      goods_photo = #{goodsPhoto,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      beforeprice = #{beforeprice,jdbcType=DECIMAL},
+      unit = #{unit,jdbcType=VARCHAR},
+      remain = #{remain,jdbcType=INTEGER},
+      introduce = #{introduce,jdbcType=VARCHAR},
+      goods_capacity = #{goodsCapacity,jdbcType=INTEGER},
+      least_num = #{leastNum,jdbcType=INTEGER},
+      second_num = #{secondNum,jdbcType=INTEGER},
+      second_price = #{secondPrice,jdbcType=DECIMAL},
+      third_num = #{thirdNum,jdbcType=INTEGER},
+      third_price = #{thirdPrice,jdbcType=DECIMAL}
+    where goods_id = #{goodsId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gys.dao.AllWarehouseOtMapper" >
+  <resultMap id="BaseResultMap" type="com.gys.entity.AllWarehouseOt" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="otid" property="otid" jdbcType="VARCHAR" />
+    <result column="ot_start_time" property="otStartTime" jdbcType="TIMESTAMP" />
+    <result column="logistics_id" property="logisticsId" jdbcType="INTEGER" />
+    <result column="jl_id" property="jlId" jdbcType="INTEGER" />
+    <result column="employee_id" property="employeeId" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="other" property="other" jdbcType="VARCHAR" />
+    <result column="zt" property="zt" jdbcType="VARCHAR" />
+    <result column="to_warehouse_id" property="toWarehouseId"    />
+    
+    <association property="fromWarehouse" column="from_warehouse_id" 
+    select="com.gys.dao.WarehouseMapper.selectByPrimaryKey"/>
+    
+ <association property="toWarehouse" column="to_warehouse_id"
+     select="com.gys.dao.WarehouseMapper.selectByPrimaryKey"/> 
+    
+    <collection property="warehouseOtList" column="otid" 
+    select="com.gys.dao.WarehouseOtMapper.selectByOtid"
+    />
+         
+    
+    
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, otid, ot_start_time, from_warehouse_id, to_warehouse_id, logistics_id, jl_id, 
+    employee_id, description, other, zt
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gys.entity.AllWarehouseOtExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from all_warehouse_ot
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from all_warehouse_ot
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from all_warehouse_ot
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gys.entity.AllWarehouseOt" >
+    insert into all_warehouse_ot (id, otid, ot_start_time, 
+      from_warehouse_id, to_warehouse_id, logistics_id, 
+      jl_id, employee_id, description, 
+      other, zt)
+    values (#{id,jdbcType=INTEGER}, #{otid,jdbcType=VARCHAR}, #{otStartTime,jdbcType=TIMESTAMP}, 
+      #{fromWarehouseId,jdbcType=INTEGER}, #{toWarehouseId,jdbcType=INTEGER}, #{logisticsId,jdbcType=INTEGER}, 
+      #{jlId,jdbcType=INTEGER}, #{employeeId,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{other,jdbcType=VARCHAR}, #{zt,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gys.entity.AllWarehouseOt" >
+    insert into all_warehouse_ot
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="otid != null" >
+        otid,
+      </if>
+      <if test="otStartTime != null" >
+        ot_start_time,
+      </if>
+      <if test="fromWarehouseId != null" >
+        from_warehouse_id,
+      </if>
+      <if test="toWarehouseId != null" >
+        to_warehouse_id,
+      </if>
+      <if test="logisticsId != null" >
+        logistics_id,
+      </if>
+      <if test="jlId != null" >
+        jl_id,
+      </if>
+      <if test="employeeId != null" >
+        employee_id,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+      <if test="zt != null" >
+        zt,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="otid != null" >
+        #{otid,jdbcType=VARCHAR},
+      </if>
+      <if test="otStartTime != null" >
+        #{otStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fromWarehouseId != null" >
+        #{fromWarehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="toWarehouseId != null" >
+        #{toWarehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsId != null" >
+        #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="jlId != null" >
+        #{jlId,jdbcType=INTEGER},
+      </if>
+      <if test="employeeId != null" >
+        #{employeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null" >
+        #{zt,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gys.entity.AllWarehouseOt" >
+    update all_warehouse_ot
+    <set >
+      <if test="otid != null" >
+        otid = #{otid,jdbcType=VARCHAR},
+      </if>
+      <if test="otStartTime != null" >
+        ot_start_time = #{otStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fromWarehouseId != null" >
+        from_warehouse_id = #{fromWarehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="toWarehouseId != null" >
+        to_warehouse_id = #{toWarehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsId != null" >
+        logistics_id = #{logisticsId,jdbcType=INTEGER},
+      </if>
+      <if test="jlId != null" >
+        jl_id = #{jlId,jdbcType=INTEGER},
+      </if>
+      <if test="employeeId != null" >
+        employee_id = #{employeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="zt != null" >
+        zt = #{zt,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gys.entity.AllWarehouseOt" >
+    update all_warehouse_ot
+    set otid = #{otid,jdbcType=VARCHAR},
+      ot_start_time = #{otStartTime,jdbcType=TIMESTAMP},
+      from_warehouse_id = #{fromWarehouseId,jdbcType=INTEGER},
+      to_warehouse_id = #{toWarehouseId,jdbcType=INTEGER},
+      logistics_id = #{logisticsId,jdbcType=INTEGER},
+      jl_id = #{jlId,jdbcType=INTEGER},
+      employee_id = #{employeeId,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      other = #{other,jdbcType=VARCHAR},
+      zt = #{zt,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

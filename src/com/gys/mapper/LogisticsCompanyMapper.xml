@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gys.dao.LogisticsCompanyMapper" >
+  <resultMap id="BaseResultMap" type="com.gys.entity.LogisticsCompany" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="logistics_name" property="logisticsName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, logistics_name, phone
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from logistics_company
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 查询所有物流公司信息-->
+  <select id="selectLogisticsCompany" resultMap="BaseResultMap"   >
+    select 
+    <include refid="Base_Column_List" />
+    from logistics_company 
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from logistics_company
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gys.entity.LogisticsCompany" >
+    insert into logistics_company (id, logistics_name, phone
+      )
+    values (#{id,jdbcType=INTEGER}, #{logisticsName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gys.entity.LogisticsCompany" >
+    insert into logistics_company
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="logisticsName != null" >
+        logistics_name,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsName != null" >
+        #{logisticsName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gys.entity.LogisticsCompany" >
+    update logistics_company
+    <set >
+      <if test="logisticsName != null" >
+        logistics_name = #{logisticsName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gys.entity.LogisticsCompany" >
+    update logistics_company
+    set logistics_name = #{logisticsName,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 分页 -->
+  <!-- 分页查询所有物流公司信息-->
+  <select id="selectLogisticsCompanyPage" resultMap="BaseResultMap"   >
+    select 
+    <include refid="Base_Column_List" />
+    from logistics_company 
+    limit #{pageNo,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  <!-- 查询所有物流公司数量 -->
+  <select id="getLogisticsCompanyAllCount" resultType="java.lang.Integer">
+  SELECT count(*) from logistics_company 
+  </select>
+  <!-- 分页结束 -->
+  
+</mapper>

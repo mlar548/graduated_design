@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gys.dao.WarehouseOtMapper" >
+  <resultMap id="BaseResultMap" type="com.gys.entity.WarehouseOt" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="from_warehouse_id" property="fromWarehouseId" jdbcType="INTEGER" />
+    <result column="to_warehouse_id" property="toWarehouseId" jdbcType="INTEGER" />
+    <result column="warehouse_goods_quantity" property="warehouseGoodsQuantity" jdbcType="INTEGER" />
+    <result column="logistics_name" property="logisticsName" jdbcType="INTEGER" />
+    <result column="otid" property="otid" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="other" property="other" jdbcType="VARCHAR" />
+    
+    <association property="goods" column="goods_id" 
+		select="com.gys.dao.GoodsMapper.selectByPrimaryKey"/>
+    
+    
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, from_warehouse_id, to_warehouse_id, goods_id, warehouse_goods_quantity, logistics_name, 
+    otid, description, other
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gys.entity.WarehouseOtExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from warehouse_ot
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from warehouse_ot
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByOtid" resultMap="BaseResultMap"   >
+    select 
+    <include refid="Base_Column_List" />
+    from warehouse_ot
+    where otid = #{otid,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from warehouse_ot
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gys.entity.WarehouseOt" >
+    insert into warehouse_ot (id, from_warehouse_id, to_warehouse_id, 
+      goods_id, warehouse_goods_quantity, logistics_name, 
+      otid, description, other
+      )
+    values (#{id,jdbcType=INTEGER}, #{fromWarehouseId,jdbcType=INTEGER}, #{toWarehouseId,jdbcType=INTEGER}, 
+      #{goodsId,jdbcType=INTEGER}, #{warehouseGoodsQuantity,jdbcType=INTEGER}, #{logisticsName,jdbcType=INTEGER}, 
+      #{otid,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gys.entity.WarehouseOt" >
+    insert into warehouse_ot
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="fromWarehouseId != null" >
+        from_warehouse_id,
+      </if>
+      <if test="toWarehouseId != null" >
+        to_warehouse_id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="warehouseGoodsQuantity != null" >
+        warehouse_goods_quantity,
+      </if>
+      <if test="logisticsName != null" >
+        logistics_name,
+      </if>
+      <if test="otid != null" >
+        otid,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="fromWarehouseId != null" >
+        #{fromWarehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="toWarehouseId != null" >
+        #{toWarehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseGoodsQuantity != null" >
+        #{warehouseGoodsQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsName != null" >
+        #{logisticsName,jdbcType=INTEGER},
+      </if>
+      <if test="otid != null" >
+        #{otid,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gys.entity.WarehouseOt" >
+    update warehouse_ot
+    <set >
+      <if test="fromWarehouseId != null" >
+        from_warehouse_id = #{fromWarehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="toWarehouseId != null" >
+        to_warehouse_id = #{toWarehouseId,jdbcType=INTEGER},
+      </if>
+      <if test="goodsId != null" >
+        goods_id = #{goodsId,jdbcType=INTEGER},
+      </if>
+      <if test="warehouseGoodsQuantity != null" >
+        warehouse_goods_quantity = #{warehouseGoodsQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsName != null" >
+        logistics_name = #{logisticsName,jdbcType=INTEGER},
+      </if>
+      <if test="otid != null" >
+        otid = #{otid,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gys.entity.WarehouseOt" >
+    update warehouse_ot
+    set from_warehouse_id = #{fromWarehouseId,jdbcType=INTEGER},
+      to_warehouse_id = #{toWarehouseId,jdbcType=INTEGER},
+      goods_id = #{goodsId,jdbcType=INTEGER},
+      warehouse_goods_quantity = #{warehouseGoodsQuantity,jdbcType=INTEGER},
+      logistics_name = #{logisticsName,jdbcType=INTEGER},
+      otid = #{otid,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      other = #{other,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- ByFromWarehouseIdToWarehouseId查调拨信息 -->
+  <select id="selectwarehouseOtByFromWarehouseIdToWarehouseId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from warehouse_ot
+    where from_warehouse_id = #{fromWarehouseId,jdbcType=INTEGER} 
+    and to_warehouse_id = #{toWarehouseId,jdbcType=INTEGER}
+  </select>
+  
+  
+</mapper>

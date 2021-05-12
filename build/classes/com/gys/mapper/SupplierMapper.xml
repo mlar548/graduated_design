@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gys.dao.SupplierMapper" >
+ <resultMap id="BaseResultMap" type="com.gys.entity.Supplier" >
+    <id column="supplier_id" property="supplierId" jdbcType="INTEGER" />
+    <result column="supplier_name" property="supplierName" jdbcType="VARCHAR" />
+    <result column="small_name" property="smallName" jdbcType="VARCHAR" />
+    <result column="english_name" property="englishName" jdbcType="VARCHAR" />
+    <result column="brand_land" property="brandLand" jdbcType="VARCHAR" />
+    <result column="founding_date" property="foundingDate" jdbcType="VARCHAR" />
+    <result column="partner_date" property="partnerDate" jdbcType="DATE" />
+    <result column="supplier_phone" property="supplierPhone" jdbcType="CHAR" />
+    <result column="supplier_email" property="supplierEmail" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="other" property="other" jdbcType="VARCHAR" />
+    <result column="supplier_log_company_id" property="supplierLogCompanyId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    supplier_id, supplier_name, small_name, english_name, brand_land, founding_date, 
+    partner_date, supplier_phone, supplier_email, address, state, other, supplier_log_company_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gys.entity.SupplierExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from supplier
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from supplier
+    where supplier_id = #{supplierId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询所有Supplier -->
+  <select id="selectSupplier" resultMap="BaseResultMap"   >
+    select 
+    <include refid="Base_Column_List" />
+    from supplier
+    </select>
+  <!-- 查询所有Supplier数量 -->
+  <select id="getAllCount" resultType="java.lang.Integer">
+  SELECT count(*) from supplier  
+  </select>
+  <!-- 分页查询所有Supplier -->
+  <select id="selectSupplierPage" resultMap="BaseResultMap"   >
+    select 
+    <include refid="Base_Column_List" />
+    from supplier
+    <!--  limit (#{pageNo,jdbcType=INTEGER}-1)*#{pageSize,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER} -->
+     limit #{pageNo,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from supplier
+    where supplier_id = #{supplierId,jdbcType=INTEGER}
+  </delete>
+  
+   
+ <insert id="insert" parameterType="com.gys.entity.Supplier" >
+    insert into supplier (supplier_id, supplier_name, small_name, 
+      english_name, brand_land, founding_date, 
+      partner_date, supplier_phone, supplier_email, 
+      address, state, other, 
+      supplier_log_company_id)
+    values (#{supplierId,jdbcType=INTEGER}, #{supplierName,jdbcType=VARCHAR}, #{smallName,jdbcType=VARCHAR}, 
+      #{englishName,jdbcType=VARCHAR}, #{brandLand,jdbcType=VARCHAR}, #{foundingDate,jdbcType=VARCHAR}, 
+      #{partnerDate,jdbcType=DATE}, #{supplierPhone,jdbcType=CHAR}, #{supplierEmail,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{other,jdbcType=VARCHAR}, 
+      #{supplierLogCompanyId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gys.entity.Supplier" >
+    insert into supplier
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="supplierId != null" >
+        supplier_id,
+      </if>
+      <if test="supplierName != null" >
+        supplier_name,
+      </if>
+      <if test="smallName != null" >
+        small_name,
+      </if>
+      <if test="englishName != null" >
+        english_name,
+      </if>
+      <if test="brandLand != null" >
+        brand_land,
+      </if>
+      <if test="foundingDate != null" >
+        founding_date,
+      </if>
+      <if test="partnerDate != null" >
+        partner_date,
+      </if>
+      <if test="supplierPhone != null" >
+        supplier_phone,
+      </if>
+      <if test="supplierEmail != null" >
+        supplier_email,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+      <if test="supplierLogCompanyId != null" >
+        supplier_log_company_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="supplierId != null" >
+        #{supplierId,jdbcType=INTEGER},
+      </if>
+      <if test="supplierName != null" >
+        #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="smallName != null" >
+        #{smallName,jdbcType=VARCHAR},
+      </if>
+      <if test="englishName != null" >
+        #{englishName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandLand != null" >
+        #{brandLand,jdbcType=VARCHAR},
+      </if>
+      <if test="foundingDate != null" >
+        #{foundingDate,jdbcType=VARCHAR},
+      </if>
+      <if test="partnerDate != null" >
+        #{partnerDate,jdbcType=DATE},
+      </if>
+      <if test="supplierPhone != null" >
+        #{supplierPhone,jdbcType=CHAR},
+      </if>
+      <if test="supplierEmail != null" >
+        #{supplierEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierLogCompanyId != null" >
+        #{supplierLogCompanyId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gys.entity.Supplier" >
+    update supplier
+    <set >
+      <if test="supplierName != null" >
+        supplier_name = #{supplierName,jdbcType=VARCHAR},
+      </if>
+      <if test="smallName != null" >
+        small_name = #{smallName,jdbcType=VARCHAR},
+      </if>
+      <if test="englishName != null" >
+        english_name = #{englishName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandLand != null" >
+        brand_land = #{brandLand,jdbcType=VARCHAR},
+      </if>
+      <if test="foundingDate != null" >
+        founding_date = #{foundingDate,jdbcType=VARCHAR},
+      </if>
+      <if test="partnerDate != null" >
+        partner_date = #{partnerDate,jdbcType=DATE},
+      </if>
+      <if test="supplierPhone != null" >
+        supplier_phone = #{supplierPhone,jdbcType=CHAR},
+      </if>
+      <if test="supplierEmail != null" >
+        supplier_email = #{supplierEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierLogCompanyId != null" >
+        supplier_log_company_id = #{supplierLogCompanyId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where supplier_id = #{supplierId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gys.entity.Supplier" >
+    update supplier
+    set supplier_name = #{supplierName,jdbcType=VARCHAR},
+      small_name = #{smallName,jdbcType=VARCHAR},
+      english_name = #{englishName,jdbcType=VARCHAR},
+      brand_land = #{brandLand,jdbcType=VARCHAR},
+      founding_date = #{foundingDate,jdbcType=VARCHAR},
+      partner_date = #{partnerDate,jdbcType=DATE},
+      supplier_phone = #{supplierPhone,jdbcType=CHAR},
+      supplier_email = #{supplierEmail,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      state = #{state,jdbcType=VARCHAR},
+      other = #{other,jdbcType=VARCHAR},
+      supplier_log_company_id = #{supplierLogCompanyId,jdbcType=INTEGER}
+    where supplier_id = #{supplierId,jdbcType=INTEGER}
+  </update>
+</mapper>
