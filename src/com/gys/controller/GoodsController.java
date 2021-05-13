@@ -157,7 +157,7 @@ public class GoodsController {
 			String originalFilename = goodsPhotoFile.getOriginalFilename();
 			// 设置上传文件的保存地址目录
 
-			String dirPath = "E:/wzg12/img/";
+			String dirPath = "D:/Graduated_DesignFile/img/";
 
 			File filePath = new File(dirPath);
 

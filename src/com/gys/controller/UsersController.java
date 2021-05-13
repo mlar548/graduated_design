@@ -633,7 +633,7 @@ return "user/goods/shopCar";
 			// 获得上存文件的原始名称
 			String originalFilename = userPhotoFile.getOriginalFilename();
 			// 设置上传文件的保存地址目录
-			String dirPath = requset.getServletContext().getRealPath("/GysManagerSystem/WebContent/img/userPhoto/");
+			String dirPath = requset.getServletContext().getRealPath("/graduated_design01/WebContent/img/userPhoto/");
 			File filePath = new File(dirPath);
 			if (!filePath.exists()) {
 				filePath.mkdirs();
@@ -856,7 +856,7 @@ return "user/goods/shopCar";
 			String originalFilename = goodsPhotoFile.getOriginalFilename();
 			// 设置上传文件的保存地址目录
 
-			String dirPath = "E:/wzg12/img/user/";
+			String dirPath = "D:/Graduated_DesignFile/img/user/";
 
 			File filePath = new File(dirPath);
 

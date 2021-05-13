@@ -628,7 +628,7 @@ document.writeln('<link href="/template/30/style/index.min.css" type="text/css" 
 			 </div>
 			 
 			<div>本站的顾客个人信息将决不会泄漏给其他任何机构和个人&nbsp;</div>
-			<p>有任何购物问题请联系我们在线客服 | 电话：15625584773（微信）
+			<p>有任何购物问题请联系我们在线客服 | 电话：13160599313（微信）
 				 | 工作时间：周一至周五 8:00－18:00</p>
 			<p>
 				 
