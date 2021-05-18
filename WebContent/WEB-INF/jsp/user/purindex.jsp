@@ -349,7 +349,7 @@ document.writeln('<link href="/template/30/style/index.min.css" type="text/css" 
 						<li style="float: left; width: 1208px;" class="current-li"><a
 							href="javascript:void(0)"><img class=""
 								src="/goods/lunbo3.jpg"
-								style="height: 395px"></a></li>
+								style="height: 450px;width: 90%"></a></li>
 						<li style="float: left; width: 1208px;" class=""><a
 							href="javascript:void(0)"><img class=""
 								src="/goods/lunbo2.jpg"
@@ -481,8 +481,8 @@ document.writeln('<link href="/template/30/style/index.min.css" type="text/css" 
 			<div class="mc delayload ecs-oh clearfix">
 				<a href="${pageContext.request.contextPath}/purindex"
 					target="_blank"> <img
-					src="/goods/mid2.jpg"
-					style="height: 100px">
+					src="/goods/mid3.jpg"
+					style="height: 120px;width: 100%">
 				</a>
 				<!--topslider end-->
 			</div>
